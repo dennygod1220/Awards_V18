@@ -4,8 +4,9 @@ const moment2 = use('moment')
 const XlsxPopulate = use('xlsx-populate')
 const Database = use('Database')
 class HiAudreyController {
-    async index({ view,session }){
-
+    async index({ view,session,auth }){
+      //管理者
+    if(auth.user.id == 1){
         //關聯式查詢
         const all_guestinfo = await Guestinfo
           .query()
@@ -13,15 +14,35 @@ class HiAudreyController {
           .fetch()
         const guestdata = all_guestinfo.toJSON()
 
-        for(let i=0;i<guestdata.length;i++){
-            guestdata[i].date = moment2(guestdata[i].date).format("YYYY-MM-DD");
-            guestdata[i].birthday = moment2(guestdata[i].birthday).format("YYYY-MM-DD");
+        for (let i = 0; i < guestdata.length; i++) {
+          guestdata[i].date = moment2(guestdata[i].date).format("YYYY-MM-DD");
+          guestdata[i].birthday = moment2(guestdata[i].birthday).format("YYYY-MM-DD");
         }
 
-        return view.render('hiaudrey/index',{
-            guestdata:guestdata,
-            SessionUser:session.get('username')+"你好"
+        return view.render('hiaudrey/index', {
+          guestdata: guestdata,
+          SessionUser: auth.user.username + "你好"
+        })
+        }
+        // 一般店長
+        else {
+          //關聯式查詢
+          const all_guestinfo = await Guestinfo
+            .query()
+            .with('StoreInfo')
+            .fetch()
+          const guestdata = all_guestinfo.toJSON()
+
+          for (let i = 0; i < guestdata.length; i++) {
+            guestdata[i].date = moment2(guestdata[i].date).format("YYYY-MM-DD");
+            guestdata[i].birthday = moment2(guestdata[i].birthday).format("YYYY-MM-DD");
+          }
+
+          return view.render('hiaudrey/index2', {
+            guestdata: guestdata,
+            SessionUser: session.get('username') + "你好"
           })
+        }
     }
 
 

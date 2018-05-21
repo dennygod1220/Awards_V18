@@ -45,7 +45,7 @@ Route.group(()=>{
 //==============登出===============================
     Route.get('/logout',async({ auth,response }) =>{
         await auth.logout();
-        return response.redirect('/AudreySP');
+        return response.redirect('/AudreySP/auth/signin');
     } )
 //================登入=================================
     
@@ -56,6 +56,8 @@ Route.group(()=>{
 
 //後台首頁
 Route.get('/AudreySP/HiAudrey','HiAudreyController.index').middleware('auth')
+// Route.get('/AudreySP/HiAudrey','UserController.show').middleware('auth')
+
 //刪除客戶資料
 Route.get('/AudreySP/HiAudrey/delete/:id', 'HiAudreyController.delete').middleware('auth')
 //手動新增客戶資料

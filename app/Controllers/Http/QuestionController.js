@@ -6,19 +6,37 @@ const storemodel = use('App/Models/StoreInfo')
 const Database = use('Database')
 
 class QuestionController {
-    async index({ view,session }){
-        const question_data = await questionM.all();
-        const question_data2 = question_data.toJSON();
-
-        for(let i=0;i<question_data2.length;i++){
-            question_data2[i].qu_test_date = moment2(question_data2[i].qu_test_date).format("YYYY-MM-DD");
+    async index({ view,session,auth }){
+        // 管理者
+        if(auth.user.id == 1){
+            const question_data = await questionM.all();
+            const question_data2 = question_data.toJSON();
+    
+            for(let i=0;i<question_data2.length;i++){
+                question_data2[i].qu_test_date = moment2(question_data2[i].qu_test_date).format("YYYY-MM-DD");
+            }
+    
+            return view.render('hiaudrey.questionindex',{
+                SessionUser:auth.user.username+"你好",
+                question_data:question_data2
+            })
         }
-
-        return view.render('hiaudrey.questionindex',{
-            SessionUser:session.get('username')+"你好",
-            question_data:question_data2
-        })
+        // 一般使用者
+        else{
+            const question_data = await questionM.all();
+            const question_data2 = question_data.toJSON();
+    
+            for(let i=0;i<question_data2.length;i++){
+                question_data2[i].qu_test_date = moment2(question_data2[i].qu_test_date).format("YYYY-MM-DD");
+            }
+    
+            return view.render('hiaudrey.questionindex2',{
+                SessionUser:auth.user.username+"你好",
+                question_data:question_data2
+            })
+        }
     }
+
     async writequestion({ view,session }){
         const store_info = await Database.select('store_num','store_name').from('store_infos')
         // const store_data = store_info.toJSON();

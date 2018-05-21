@@ -39,7 +39,6 @@ class UpdatedbController {
                     const gu = await gestmodel.find(unaudited_guest[i].id);
                     console.log(gu.toJSON().guest_name + "_符合");
                     const inv = await Awards.find(arr1[i][0].id);
-                    //如果發票吻合，但在DB中有重複的姓名、電話、生日，將狀態改為
                     //發送簡訊
                     const gu_name = gu.toJSON().guest_name;
                     const phone = gu.toJSON().cell_phone;
@@ -60,7 +59,7 @@ class UpdatedbController {
                     req("http://api.message.net.tw/send.php?id=0905273575&password=C27198500&tel=" + phone + ";&mtype=G&encoding=utf8&msg=" + msg1, function (error, response, body) {
                         console.log(body);
                     });
-                    req("http://api.message.net.tw/send.php?id=0905273575&password=C27198500&tel=" + phone + ";&mtype=G&encoding=utf8&sdate=" + date + "042000&msg=" + msg2, function (error, response, body) {
+                    req("http://api.message.net.tw/send.php?id=0905273575&password=C27198500&tel=" + phone + ";&mtype=G&encoding=utf8&sdate=" + date + "120000&msg=" + msg2, function (error, response, body) {
                         console.log(body);
                     });
                     //將此客戶狀態改為已發送
